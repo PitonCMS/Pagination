@@ -1,0 +1,22 @@
+{
+    "name": "pitoncms/pagination",
+    "description": "Render page number links in templates",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/pitoncms/orm",
+    "keywords": ["page numbers","pagination","twig"],
+    "authors": [
+        {
+            "name": "Wolfgang Moritz",
+            "email": "wolfmoritz@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+        },
+    "autoload": {
+        "psr-4": {
+            "Piton\\Pagination\\": "src"
+        }
+    }
+}
