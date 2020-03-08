@@ -214,15 +214,16 @@ trait PaginationTrait
 
         if ($env) {
             // Called from TwigPagination class
-            $values['links'] = $this->values;
-            $values['currentPageLinkNumber'] = $this->currentPageLinkNumber;
-            $values['numberOfPageLinks'] = $this->numberOfPageLinks;
-            $values['pageUrl'] = $this->pageUrl;
+            $values['pagination']['links'] = $this->values['links'];
+            $values['pagination']['currentPageLinkNumber'] = $this->currentPageLinkNumber;
+            $values['pagination']['numberOfPageLinks'] = $this->numberOfPageLinks;
+            $values['pagination']['pageUrl'] = $this->pageUrl;
+            $values['pagination']['paginationWrapperClass'] = $this->paginationWrapperClass;
 
-        // Add custom template
-            // $env->addRuntimeLoader(new FilesystemLoader(['PitonPagination' => dirname(__FILE__) . '/templates/']));
-
-            // $env->render(dirname(__FILE__) . '/templates/twigPageLinks.html', $values);
+            // Add custom Twig pagination template and display
+            $loader = $env->getLoader();
+            $loader->setPaths(dirname(__FILE__) . '/templates/', 'pitonPagination');
+            $env->display('@pitonPagination/twigPageLinks.html', $values);
         } else {
             // Called from Pagination class
             $counter = 0;

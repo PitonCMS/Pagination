@@ -1,11 +1,11 @@
-{# Pagiation Include #}
+{# Piton Pagiation Twig Template #}
 
-  <div class="pagination">
-    {% for p in links %}
+  <div class="{{ pagination.paginationWrapperClass }}">
+    {% for p in pagination.links %}
       {% if loop.first %}
         {# First pagination position #}
-        <div {% if currentPageLinkNumber == 1 %}class="disabled"{% endif %}>
-          {% if currentPageLinkNumber == 1 %}
+        <div {% if pagination.currentPageLinkNumber == 1 %}class="disabled"{% endif %}>
+          {% if pagination.currentPageLinkNumber == 1 %}
             {# Disable first link when  on first page #}
             <span aria-hidden="true">&laquo;</span>
           {% else %}
@@ -21,8 +21,8 @@
 
       {# For all other working links #}
       {% if not loop.first and not loop.last and p.pageNumber != 'ellipsis' %}
-      <div {% if currentPageLinkNumber == p.pageNumber %}class="active"{% endif %}>
-        {% if currentPageLinkNumber == p.pageNumber %}
+      <div {% if pagination.currentPageLinkNumber == p.pageNumber %}class="active"{% endif %}>
+        {% if pagination.currentPageLinkNumber == p.pageNumber %}
           {# No need to make the current page a link #}
           <a>{{ p.pageNumber }}</a>
         {% else %}
@@ -33,8 +33,8 @@
 
       {# Last pagination position #}
       {% if loop.last %}
-      <div {% if currentPageLinkNumber == numberOfPageLinks %}class="disabled"{% endif %}>
-        {% if currentPageLinkNumber == numberOfPageLinks %}
+      <div {% if pagination.currentPageLinkNumber == pagination.numberOfPageLinks %}class="disabled"{% endif %}>
+        {% if pagination.currentPageLinkNumber == pagination.numberOfPageLinks %}
           <span aria-hidden="true">&raquo;</span>
         {% else %}
           {# End with the "Next" pageNumber #}
