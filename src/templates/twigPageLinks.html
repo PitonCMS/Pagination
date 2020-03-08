@@ -1,0 +1,47 @@
+{# Pagiation Include #}
+
+  <div class="pagination">
+    {% for p in links %}
+      {% if loop.first %}
+        {# First pagination position #}
+        <div {% if currentPageLinkNumber == 1 %}class="disabled"{% endif %}>
+          {% if currentPageLinkNumber == 1 %}
+            {# Disable first link when  on first page #}
+            <span aria-hidden="true">&laquo;</span>
+          {% else %}
+            <a href="{{ p.href }}" aria-label="Previous" title="Previous"><span aria-hidden="true">&laquo;</span></a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {# Print ellipsis as gap filler #}
+      {% if p.pageNumber == 'ellipsis' %}
+        <div class="disabled">&hellip;</div>
+      {% endif %}
+
+      {# For all other working links #}
+      {% if not loop.first and not loop.last and p.pageNumber != 'ellipsis' %}
+      <div {% if currentPageLinkNumber == p.pageNumber %}class="active"{% endif %}>
+        {% if currentPageLinkNumber == p.pageNumber %}
+          {# No need to make the current page a link #}
+          <a>{{ p.pageNumber }}</a>
+        {% else %}
+          <a href="{{ p.href }}">{{ p.pageNumber }}</a>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {# Last pagination position #}
+      {% if loop.last %}
+      <div {% if currentPageLinkNumber == numberOfPageLinks %}class="disabled"{% endif %}>
+        {% if currentPageLinkNumber == numberOfPageLinks %}
+          <span aria-hidden="true">&raquo;</span>
+        {% else %}
+          {# End with the "Next" pageNumber #}
+          <a href="{{ p.href }}" aria-label="Next" title="Next" ><span aria-hidden="true">&raquo;</span></a>
+        {% endif %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
