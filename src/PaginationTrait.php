@@ -18,9 +18,11 @@ use Twig\Loader\FilesystemLoader;
 
 /**
  * Pagination Trait
+ * @version 0.1.1
  */
 trait PaginationTrait
 {
+    protected $domain;
     protected $pageUrl;
     protected $queryStringPageNumberParam;
     protected $currentPageLinkNumber;
@@ -54,18 +56,19 @@ trait PaginationTrait
      */
     public function setPagePath(string $pagePath, array $queryParams = null): void
     {
-        // Check if there is a leading slash, but only if not http(s)
-        $leadingChar = mb_substr($pagePath, 0, 1);
-        if ('h' !== $leadingChar && '/' !== $leadingChar) {
-            $pagePath = '/' . $pagePath;
+        // If the provided path is http(s), just set the link and ignore the $domain property
+        if ('http' === mb_strtolower(mb_substr($pagePath, 0, 4))) {
+            $this->pageUrl = $pagePath . '?';
+        } else {
+            $this->pageUrl = rtrim($this->domain, '/') . '/' . ltrim($pagePath, '/') . '?';
         }
 
-        $this->pageUrl = $pagePath . '?';
-
+        // Add any other query paramters
         if ($queryParams) {
             $this->pageUrl .= http_build_query($queryParams) . '&';
         }
 
+        // Add pagination param at end
         $this->pageUrl .= $this->queryStringPageNumberParam . '=';
     }
 
@@ -240,6 +243,7 @@ trait PaginationTrait
      */
     public function setConfig(?array $config): void
     {
+        $this->domain = $config['domain'] ?? '';
         $this->queryStringPageNumberParam = $config['queryStringPageNumberParam'] ?? 'page';
         $this->resultsPerPage = (int) ($config['resultsPerPage'] ?? 10);
         $this->numberOfAdjacentLinks = (int) ($config['numberOfAdjacentLinks'] ?? 2);
