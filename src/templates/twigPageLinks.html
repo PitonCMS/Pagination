@@ -1,47 +1,37 @@
-{# Piton Pagiation Twig Template #}
+{#
+ * PitonCMS (https://github.com/PitonCMS)
+ *
+ * @link      https://github.com/PitonCMS/Piton
+ * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ #}
 
   <div class="{{ pagination.paginationWrapperClass }}">
     {% for p in pagination.links %}
       {% if loop.first %}
         {# First pagination position #}
-        <div {% if pagination.currentPageLinkNumber == 1 %}class="disabled"{% endif %}>
-          {% if pagination.currentPageLinkNumber == 1 %}
-            {# Disable first link when  on first page #}
-            <span aria-hidden="true">&laquo;</span>
-          {% else %}
-            <a href="{{ p.href }}" aria-label="Previous" title="Previous"><span aria-hidden="true">&laquo;</span></a>
-          {% endif %}
+        <div class="control {% if pagination.currentPageLinkNumber == 1 %}disabled{% endif %}">
+          <a href="{{ p.href }}" aria-label="Previous" title="Previous">&laquo;</a>
         </div>
       {% endif %}
 
       {# Print ellipsis as gap filler #}
       {% if p.pageNumber == 'ellipsis' %}
-        <div class="disabled">&hellip;</div>
+        <div class="ellipsis">&hellip;</div>
       {% endif %}
 
       {# For all other working links #}
       {% if not loop.first and not loop.last and p.pageNumber != 'ellipsis' %}
-      <div {% if pagination.currentPageLinkNumber == p.pageNumber %}class="active"{% endif %}>
-        {% if pagination.currentPageLinkNumber == p.pageNumber %}
-          {# No need to make the current page a link #}
-          <a>{{ p.pageNumber }}</a>
-        {% else %}
-          <a href="{{ p.href }}">{{ p.pageNumber }}</a>
-        {% endif %}
+      <div class="page-link {% if pagination.currentPageLinkNumber == p.pageNumber %}active{% endif %}">
+        <a href="{{ p.href }}">{{ p.pageNumber }}</a>
       </div>
       {% endif %}
 
       {# Last pagination position #}
       {% if loop.last %}
-      <div {% if pagination.currentPageLinkNumber == pagination.numberOfPageLinks %}class="disabled"{% endif %}>
-        {% if pagination.currentPageLinkNumber == pagination.numberOfPageLinks %}
-          <span aria-hidden="true">&raquo;</span>
-        {% else %}
-          {# End with the "Next" pageNumber #}
-          <a href="{{ p.href }}" aria-label="Next" title="Next" ><span aria-hidden="true">&raquo;</span></a>
-        {% endif %}
+      <div class="control {% if pagination.currentPageLinkNumber == pagination.numberOfPageLinks %}disabled{% endif %}">
+        <a href="{{ p.href }}" aria-label="Next" title="Next" >&raquo;</a>
       </div>
       {% endif %}
     {% endfor %}
   </div>
-
