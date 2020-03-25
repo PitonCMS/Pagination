@@ -18,7 +18,7 @@ use Twig\Loader\FilesystemLoader;
 
 /**
  * Pagination Trait
- * @version 0.1.1
+ * @version 0.1.2
  */
 trait PaginationTrait
 {
@@ -151,7 +151,7 @@ trait PaginationTrait
         }
 
         // Make sure we have required variables
-        if (!$this->totalResultsFound) {
+        if (!isset($this->totalResultsFound)) {
             throw new Exception('PitonPagination: Total rows in results not set in setTotalResultsFound()');
         }
 
