@@ -16,7 +16,7 @@ use Piton\Pagination\PaginationTrait;
 
 /**
  * Renders Page Number Links
- * @version 0.1.2
+ * @version 0.1.3
  */
 class Pagination
 {
