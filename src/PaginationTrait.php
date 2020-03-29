@@ -18,21 +18,21 @@ use Twig\Loader\FilesystemLoader;
 
 /**
  * Pagination Trait
- * @version 0.1.2
+ * @version 0.1.3
  */
 trait PaginationTrait
 {
-    protected $domain;
+    protected $domain = '';
     protected $pageUrl;
-    protected $queryStringPageNumberParam;
+    protected $queryStringPageNumberParam = 'page';
     protected $currentPageLinkNumber;
     protected $numberOfPageLinks;
-    protected $resultsPerPage;
-    protected $numberOfAdjacentLinks;
-    protected $totalResultsFound;
+    protected $resultsPerPage = 10;
+    protected $numberOfAdjacentLinks = 2;
+    protected $totalResultsFound = 0;
     protected $cache = [];
     protected $values = [];
-    protected $paginationWrapperClass;
+    protected $paginationWrapperClass = 'piton-pagination';
 
     /**
      * Constructor
@@ -243,10 +243,28 @@ trait PaginationTrait
      */
     public function setConfig(?array $config): void
     {
-        $this->domain = $config['domain'] ?? '';
-        $this->queryStringPageNumberParam = $config['queryStringPageNumberParam'] ?? 'page';
-        $this->resultsPerPage = (int) ($config['resultsPerPage'] ?? 10);
-        $this->numberOfAdjacentLinks = (int) ($config['numberOfAdjacentLinks'] ?? 2);
-        $this->paginationWrapperClass = $config['paginationWrapperClass'] ?? 'piton-pagination';
+        if (isset($config['domain'])) {
+            $this->domain = $config['domain'];
+        }
+
+        if (isset($config['queryStringPageNumberParam'])) {
+            $this->queryStringPageNumberParam = $config['queryStringPageNumberParam'];
+        }
+
+        if (isset($config['resultsPerPage']) && is_numeric($config['resultsPerPage'])) {
+            $this->resultsPerPage = (int) $config['resultsPerPage'];
+        }
+
+        if (isset($config['numberOfAdjacentLinks']) && is_numeric($config['numberOfAdjacentLinks'])) {
+            $this->numberOfAdjacentLinks = (int) $config['numberOfAdjacentLinks'];
+        }
+
+        if (isset($config['paginationWrapperClass'])) {
+            $this->paginationWrapperClass = $config['paginationWrapperClass'];
+        }
+
+        if (isset($config['totalResultsFound'])) {
+            $this->setTotalResultsFound($config['totalResultsFound']);
+        }
     }
 }
