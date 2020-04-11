@@ -21,7 +21,6 @@ use Twig\Environment;
 /**
  * Renders Page Number Links
  * Use this class if using Twig
- * @version 0.1.3
  */
 class TwigPagination extends AbstractExtension implements GlobalsInterface
 {

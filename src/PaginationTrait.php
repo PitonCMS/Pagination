@@ -18,7 +18,7 @@ use Twig\Loader\FilesystemLoader;
 
 /**
  * Pagination Trait
- * @version 0.1.3
+ * @version 0.2.0
  */
 trait PaginationTrait
 {
@@ -49,13 +49,23 @@ trait PaginationTrait
     /**
      * Set Page Path
      *
-     * Submit URL with domain and path, plus any additional query string parameters as array
+     * Submit URL with domain and path
+     * This automatically gets other query params and values, and passes them to the next request.
+     * Optionally update other params by passing in the second argument.
      * @param  string $pagePath    Path to resource, can optionally include http(s) full qualified domain, or just path
-     * @param  array  $queryParams Array of query strings and values
+     * @param  array  $queryParams Optional array of query string params and values
      * @return void
      */
     public function setPagePath(string $pagePath, array $queryParams = null): void
     {
+        // Capture any existing query params from $_GET array
+        $params = $_GET ?? [];
+
+        // Strip off any query params as those were captured above and will be reattached
+        if (stristr($pagePath, '?')) {
+            $pagePath = mb_substr($pagePath, 0, mb_strpos($pagePath, '?'));
+        }
+
         // If the provided path is http(s), just set the link and ignore the $domain property
         if ('http' === mb_strtolower(mb_substr($pagePath, 0, 4))) {
             $this->pageUrl = $pagePath . '?';
@@ -63,13 +73,19 @@ trait PaginationTrait
             $this->pageUrl = rtrim($this->domain, '/') . '/' . ltrim($pagePath, '/') . '?';
         }
 
-        // Add any other query paramters
+        // Update any query params if provided
         if ($queryParams) {
-            $this->pageUrl .= http_build_query($queryParams) . '&';
+            array_walk($queryParams, function ($value, $key) use (&$params) {
+                $params[$key] = $value;
+            });
         }
 
-        // Add pagination param at end
-        $this->pageUrl .= $this->queryStringPageNumberParam . '=';
+        // Remove and re-add page number query param so it is at the end of the array, and therefore the end of the query string
+        unset($params[$this->queryStringPageNumberParam]);
+        $params[$this->queryStringPageNumberParam] = '';
+
+        // Build query string
+        $this->pageUrl .= http_build_query($params);
     }
 
     /**
