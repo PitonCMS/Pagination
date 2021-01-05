@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2020 Wolfgang Moritz
+ * @copyright Copyright (c) 2015 - 2021 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -14,11 +14,10 @@ namespace Piton\Pagination;
 
 use Exception;
 use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 /**
  * Pagination Trait
- * @version 0.2.0
+ * @version 0.3.0
  */
 trait PaginationTrait
 {
@@ -32,7 +31,7 @@ trait PaginationTrait
     protected $totalResultsFound = 0;
     protected $cache = [];
     protected $values = [];
-    protected $paginationWrapperClass = 'piton-pagination';
+    protected $paginationWrapperClass = 'pagination';
 
     /**
      * Constructor
@@ -42,31 +41,37 @@ trait PaginationTrait
      */
     public function __construct(array $config = null)
     {
-        $this->setConfig($config ?? []);
         $this->setCurrentPageNumber();
+        $this->setConfig($config ?? []);
+        $this->setPagePath();
     }
 
     /**
      * Set Page Path
      *
-     * Submit URL with domain and path
+     * Set link URL with domain and path, or defaults to the current path
      * This automatically gets other query params and values, and passes them to the next request.
      * Optionally update other params by passing in the second argument.
-     * @param  string $pagePath    Path to resource, can optionally include http(s) full qualified domain, or just path
-     * @param  array  $queryParams Optional array of query string params and values
+     * @param  string|null $pagePath    Path to resource, can optionally include http(s) full qualified domain, or just path
+     * @param  array|null  $queryParams Optional array of query string params and values
      * @return void
      */
-    public function setPagePath(string $pagePath, array $queryParams = null): void
+    public function setPagePath(string $pagePath = null, array $queryParams = null): void
     {
+        // If $pagePath is not set, just use current request URI
+        if ($pagePath === null) {
+            $pagePath = htmlspecialchars($_SERVER['REQUEST_URI']);
+        }
+
         // Capture any existing query params from $_GET array
         $params = $_GET ?? [];
 
-        // Strip off any query params as those were captured above and will be reattached
+        // Strip off any query params as those were captured above and will be reattached later
         if (stristr($pagePath, '?')) {
             $pagePath = mb_substr($pagePath, 0, mb_strpos($pagePath, '?'));
         }
 
-        // If the provided path is http(s), just set the link and ignore the $domain property
+        // If the provided path starts with http(s), just set the link and ignore the $domain property
         if ('http' === mb_strtolower(mb_substr($pagePath, 0, 4))) {
             $this->pageUrl = $pagePath . '?';
         } else {
