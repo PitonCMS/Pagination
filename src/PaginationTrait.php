@@ -4,7 +4,7 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright (c) 2015 - 2021 Wolfgang Moritz
+ * @copyright Copyright 2015 Wolfgang Moritz
  * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
  */
 
@@ -17,7 +17,7 @@ use Twig\Environment;
 
 /**
  * Pagination Trait
- * @version 0.2.0
+ * @version 0.4.0
  */
 trait PaginationTrait
 {
@@ -32,6 +32,13 @@ trait PaginationTrait
     protected $cache = [];
     protected $values = [];
     protected $paginationWrapperClass = 'pagination';
+    protected $linkBlockClass = 'page-link';
+    protected $anchorClass = '';
+    protected $previousText = '&laquo;';
+    protected $nextText = '&raquo;';
+    protected $ellipsisText = '&hellip;';
+    protected $templateDirectory;
+    protected $templateFilename;
 
     /**
      * Constructor
@@ -243,11 +250,16 @@ trait PaginationTrait
             $values['pagination']['numberOfPageLinks'] = $this->numberOfPageLinks;
             $values['pagination']['pageUrl'] = $this->pageUrl;
             $values['pagination']['paginationWrapperClass'] = $this->paginationWrapperClass;
+            $values['pagination']['anchorClass'] = $this->anchorClass;
+            $values['pagination']['previousText'] = $this->previousText;
+            $values['pagination']['nextText'] = $this->nextText;
+            $values['pagination']['ellipsisText'] = $this->ellipsisText;
+            $values['pagination']['linkBlockClass'] = $this->linkBlockClass;
 
             // Add custom Twig pagination template and display
             $loader = $env->getLoader();
-            $loader->setPaths(dirname(__FILE__) . '/templates/', 'pitonPagination');
-            $env->display('@pitonPagination/twigPageLinks.html', $values);
+            $loader->setPaths($this->templateDirectory, 'pitonPagination');
+            $env->display('@pitonPagination/' . $this->templateFilename, $values);
         } else {
             // Called from Pagination class
             $counter = 0;
@@ -264,28 +276,73 @@ trait PaginationTrait
      */
     public function setConfig(?array $config): void
     {
+        // Optional fully qualified domaine
         if (isset($config['domain'])) {
             $this->domain = $config['domain'];
         }
 
+        // Query string param name
         if (isset($config['queryStringPageNumberParam'])) {
             $this->queryStringPageNumberParam = $config['queryStringPageNumberParam'];
         }
 
+        // The number of results to display per page
         if (isset($config['resultsPerPage']) && is_numeric($config['resultsPerPage'])) {
             $this->resultsPerPage = (int) $config['resultsPerPage'];
         }
 
+        // Number of adjacent links to display next to the current active page. Only works when there are many links
         if (isset($config['numberOfAdjacentLinks']) && is_numeric($config['numberOfAdjacentLinks'])) {
             $this->numberOfAdjacentLinks = (int) $config['numberOfAdjacentLinks'];
         }
 
+        // Total number of results found by query
+        if (isset($config['totalResultsFound'])) {
+            $this->setTotalResultsFound($config['totalResultsFound']);
+        }
+
+        // Class to apply in container div
         if (isset($config['paginationWrapperClass'])) {
             $this->paginationWrapperClass = $config['paginationWrapperClass'];
         }
 
-        if (isset($config['totalResultsFound'])) {
-            $this->setTotalResultsFound($config['totalResultsFound']);
+        // Class to apply to each link block div
+        if (isset($config['linkBlockClass'])) {
+            $this->linkBlockClass = $config['linkBlockClass'];
+        }
+
+        // Class to apply to each anchor
+        if (isset($config['anchorClass'])) {
+            $this->anchorClass = $config['anchorClass'];
+        }
+
+        // Text or symbol to display in previous button
+        if (isset($config['previousText'])) {
+            $this->previousText = $config['previousText'];
+        }
+
+        // Text or symbol to display in next button
+        if (isset($config['nextText'])) {
+            $this->nextText = $config['nextText'];
+        }
+
+        // Text or symbol to display in ellipsis blocks ... that fill gaps when there are too many page blocks
+        if (isset($config['ellipsisText'])) {
+            $this->ellipsisText = $config['ellipsisText'];
+        }
+
+        // Path to directory containing HTML templates. Including trailing slash /
+        if (isset($config['templateDirectory'])) {
+            $this->templateDirectory = $config['templateDirectory'];
+        } else {
+            $this->templateDirectory = dirname(__FILE__) . '/templates/';
+        }
+
+        // Template file name including extension to load
+        if (isset($config['templateFilename'])) {
+            $this->templateFilename = $config['templateFilename'];
+        } else {
+            $this->templateFilename = 'twigPageLinks.html';
         }
     }
 }
