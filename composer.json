@@ -1,10 +1,10 @@
 {
     "name": "pitoncms/pagination",
-    "description": "Render page number links in templates",
+    "description": "Display page number links in Twig  or PHP templates.",
     "type": "library",
     "license": "MIT",
     "homepage": "https://github.com/pitoncms/orm",
-    "keywords": ["page numbers","pagination","twig"],
+    "keywords": ["page numbers","pagination","twig", "page links"],
     "authors": [
         {
             "name": "Wolfgang Moritz",
