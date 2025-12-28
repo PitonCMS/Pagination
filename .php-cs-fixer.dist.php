@@ -10,7 +10,6 @@ return (new Config())
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRiskyAllowed(false)
     ->setRules([
-        // Base standard
         '@PSR12' => true,
         'array_syntax' => ['syntax' => 'short'],
         'ordered_imports' => ['sort_algorithm' => 'alpha'],
@@ -26,7 +25,6 @@ return (new Config())
         'phpdoc_single_line_var_spacing' => true,
         'phpdoc_var_without_name' => true,
     ])
-    // Finder from your default config, with sensible exclusions
     ->setFinder(
         (new Finder())
             ->in(__DIR__ . '/src')
