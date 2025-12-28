@@ -12,10 +12,9 @@ declare(strict_types=1);
 
 namespace Piton\Pagination;
 
-use Piton\Pagination\PaginationTrait;
-
 /**
  * Renders Page Number Links
+ * @version 1.0.0
  */
 class Pagination
 {

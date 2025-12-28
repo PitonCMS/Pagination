@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace Piton\Pagination;
 
-use Piton\Pagination\PaginationTrait;
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
-use Twig\Environment;
 
 /**
  * Renders Page Number Links
+ * @version 1.0.0
  * Use this class if using Twig
  */
 class TwigPagination extends AbstractExtension implements GlobalsInterface

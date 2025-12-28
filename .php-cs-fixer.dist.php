@@ -29,7 +29,7 @@ return (new Config())
     // Finder from your default config, with sensible exclusions
     ->setFinder(
         (new Finder())
-            ->in(__DIR__)
+            ->in(__DIR__ . '/src')
             ->exclude('vendor')
             ->exclude('storage')
             ->name('*.php')
