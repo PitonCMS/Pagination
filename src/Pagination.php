@@ -26,7 +26,6 @@ class Pagination
      * Print Pagination
      *
      * Render pagination links HTML
-     * @param  void
      * @return void
      */
     public function __invoke(): void

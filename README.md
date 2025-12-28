@@ -1,3 +1,3 @@
 # Pagination Links
 
-## Unstable - In Development
+## For PitonCMS
