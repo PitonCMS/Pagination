@@ -14,7 +14,7 @@ return (new Config())
         '@PSR12' => true,
         'array_syntax' => ['syntax' => 'short'],
         'ordered_imports' => ['sort_algorithm' => 'alpha'],
-        'no_unused_imports' => true,
+        // 'no_unused_imports' => true,
         'not_operator_with_successor_space' => false,
         'trailing_comma_in_multiline' => ['elements' => ['arrays']],
         'phpdoc_scalar' => true,
@@ -31,7 +31,6 @@ return (new Config())
         (new Finder())
             ->in(__DIR__ . '/src')
             ->exclude('vendor')
-            ->exclude('storage')
             ->name('*.php')
             ->ignoreDotFiles(true)
             ->ignoreVCS(true)
