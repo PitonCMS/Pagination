@@ -4,8 +4,8 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2015 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright 2015-2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
@@ -17,39 +17,38 @@ use Twig\Environment;
 
 /**
  * Pagination Trait
- * @version 0.4.0
+ * @version 1.0.0
  */
 trait PaginationTrait
 {
-    protected $domain = '';
-    protected $pageUrl;
-    protected $queryStringPageNumberParam = 'page';
-    protected $currentPageLinkNumber;
-    protected $numberOfPageLinks;
-    protected $resultsPerPage = 10;
-    protected $numberOfAdjacentLinks = 2;
-    protected $totalResultsFound = 0;
-    protected $cache = [];
-    protected $values = [];
-    protected $paginationWrapperClass = 'pagination';
-    protected $linkBlockClass = 'page-link';
-    protected $anchorClass = '';
-    protected $previousText = '&laquo;';
-    protected $nextText = '&raquo;';
-    protected $ellipsisText = '&hellip;';
-    protected $templateDirectory;
-    protected $templateFilename;
+    protected string $domain = '';
+    protected string $pageUrl;
+    protected string $queryStringPageNumberParam = 'page';
+    protected int $currentPageLinkNumber;
+    protected int $numberOfPageLinks;
+    protected int $resultsPerPage = 10;
+    protected int $numberOfAdjacentLinks = 2;
+    protected int $totalResultsFound = 0;
+    protected array $cache = [];
+    protected array $values = [];
+    protected string $paginationWrapperClass = 'pagination';
+    protected string $linkBlockClass = 'page-link';
+    protected string $anchorClass = '';
+    protected string $previousText = '&laquo;';
+    protected string $nextText = '&raquo;';
+    protected string $ellipsisText = '&hellip;';
+    protected string $templateDirectory;
+    protected string $templateFilename;
 
     /**
      * Constructor
      *
      * @param  array $config Configuration options array
-     * @return void
      */
-    public function __construct(array $config = null)
+    public function __construct(?array $config = null)
     {
         $this->setCurrentPageNumber();
-        $this->setConfig($config ?? []);
+        $this->setConfig($config);
         $this->setPagePath();
     }
 
@@ -63,7 +62,7 @@ trait PaginationTrait
      * @param  array|null  $queryParams Optional array of query string params and values
      * @return void
      */
-    public function setPagePath(string $pagePath = null, array $queryParams = null): void
+    public function setPagePath(?string $pagePath = null, ?array $queryParams = null): void
     {
         // If $pagePath is not set, just use current request URI
         if ($pagePath === null) {
@@ -234,12 +233,12 @@ trait PaginationTrait
      * Render Pagination HTML
      *
      * @param Twig\Environment|null $env Only provided by TwigPagination
-     * @return string
+     * @return void
      */
-    protected function render(Environment $env = null)
+    protected function render(?Environment $env = null): void
     {
         // If there are no rows, or if there is only one page of results then do not display the pagination
-        if ($this->totalResultsFound === 0 || $this->resultsPerPage >= $this->totalResultsFound) {
+        if ($this->totalResultsFound <= $this->resultsPerPage) {
             return;
         }
 
@@ -262,9 +261,10 @@ trait PaginationTrait
             $env->display('@pitonPagination/' . $this->templateFilename, $values);
         } else {
             // Called from Pagination class
+            // Variables $counter and $numberOfLinks are referenced in pageLinks.php
             $counter = 0;
             $numberOfLinks = count($this->values['links']) - 1;
-            require dirname(__FILE__) . '/templates/pageLinks.php';
+            require __DIR__ . '/templates/pageLinks.php';
         }
     }
 
@@ -335,7 +335,7 @@ trait PaginationTrait
         if (isset($config['templateDirectory'])) {
             $this->templateDirectory = $config['templateDirectory'];
         } else {
-            $this->templateDirectory = dirname(__FILE__) . '/templates/';
+            $this->templateDirectory = __DIR__ . '/templates/';
         }
 
         // Template file name including extension to load

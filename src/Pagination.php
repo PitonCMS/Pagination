@@ -4,18 +4,17 @@
  * PitonCMS (https://github.com/PitonCMS)
  *
  * @link      https://github.com/PitonCMS/Piton
- * @copyright Copyright 2015 Wolfgang Moritz
- * @license   https://github.com/PitonCMS/Piton/blob/master/LICENSE (MIT License)
+ * @copyright Copyright 2015-2026 Wolfgang Moritz
+ * @license   AGPL-3.0-or-later with Theme Exception. See LICENSE file for details.
  */
 
 declare(strict_types=1);
 
 namespace Piton\Pagination;
 
-use Piton\Pagination\PaginationTrait;
-
 /**
  * Renders Page Number Links
+ * @version 1.0.0
  */
 class Pagination
 {
@@ -26,10 +25,9 @@ class Pagination
      * Print Pagination
      *
      * Render pagination links HTML
-     * @param  void
      * @return void
      */
-    public function __invoke()
+    public function __invoke(): void
     {
         $this->buildPageLinks();
         $this->render();
