@@ -2,7 +2,6 @@
     "name": "pitoncms/pagination",
     "description": "Display page number links in Twig  or PHP templates.",
     "type": "library",
-    "version": "dev-develop",
     "license": "MIT",
     "homepage": "https://github.com/pitoncms/orm",
     "keywords": ["page numbers","pagination","twig", "page links"],
@@ -13,7 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=7.4"
+        "php": ">=8.3"
         },
     "autoload": {
         "psr-4": {
