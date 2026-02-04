@@ -66,7 +66,7 @@ trait PaginationTrait
     {
         // If $pagePath is not set, just use current request URI
         if ($pagePath === null) {
-            $pagePath = htmlspecialchars($_SERVER['REQUEST_URI']);
+            $pagePath = htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES);
         }
 
         // Capture any existing query params from $_GET array
@@ -109,7 +109,7 @@ trait PaginationTrait
     public function setCurrentPageNumber(): void
     {
         if (isset($_GET[$this->queryStringPageNumberParam])) {
-            $this->currentPageLinkNumber = (int) htmlspecialchars($_GET[$this->queryStringPageNumberParam]);
+            $this->currentPageLinkNumber = (int) htmlspecialchars($_GET[$this->queryStringPageNumberParam], ENT_QUOTES);
         } else {
             $this->currentPageLinkNumber = 1;
         }
