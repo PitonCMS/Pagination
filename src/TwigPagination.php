@@ -19,7 +19,6 @@ use Twig\TwigFunction;
 
 /**
  * Renders Page Number Links
- * @version 1.0.0
  * Use this class if using Twig
  */
 class TwigPagination extends AbstractExtension implements GlobalsInterface
