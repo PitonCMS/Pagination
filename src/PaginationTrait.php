@@ -16,7 +16,6 @@ use Twig\Environment;
 
 /**
  * Pagination Trait
- * @version 1.2.0
  */
 trait PaginationTrait
 {
